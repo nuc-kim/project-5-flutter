@@ -21,14 +21,40 @@ class MyApp extends StatelessWidget {
 }
 
 class RandomWords extends StatefulWidget{
+  const RandomWords({Key? key}) : super(key: key);
   @override
   _RandomWordsState createState() => _RandomWordsState();
 }
 
 class _RandomWordsState extends State<RandomWords>{
+
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  // static const List<Widget> _widgetOptions = <Widget>[
+  //   Text(
+  //     'view 1',
+  //     style: optionStyle,
+  //   ),
+  //   Text(
+  //     'view 2',
+  //     style: optionStyle,
+  //   ),
+  //   Text(
+  //     'view 3',
+  //     style: optionStyle,
+  //   ),
+  // ];
+
   final _suggestions = <WordPair>[];
   final _saved = <WordPair>{};
   final _biggerFont = const TextStyle(fontSize: 18.0);
+
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +69,51 @@ class _RandomWordsState extends State<RandomWords>{
           ),
         ],
       ),
-      body: _buildSuggestions(),
+      body: _changeView(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(Icons.all_inbox),
+              label: 'List'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'User'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings_applications),
+              label: 'Settings'
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.purple,
+        onTap: _onItemTapped,
+      ),
+
     );
   }
+  Widget _changeView(int index){
+    switch(index){
+      case 0:
+        return _buildSuggestions();
+      case 1:
+        return const Text(
+                 'view 2',
+                 style: optionStyle,
+               );
+      case 2:
+        return const Text(
+          'view 2',
+          style: optionStyle,
+        );
+      default:
+        return const Text(
+          'default',
+          style: optionStyle,
+        );
+    }
+  }
+
   Widget _buildSuggestions(){
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
@@ -112,3 +180,4 @@ class _RandomWordsState extends State<RandomWords>{
     );
   }
 }
+
