@@ -45,6 +45,9 @@ class MyApp extends StatelessWidget {
             title: const TitleBar(),
             elevation: 0,
             bottom: const TabBar(
+              isScrollable: true,
+              unselectedLabelColor: Colors.black45,
+              indicatorColor: Colors.black,
               tabs: [
                 Tab(
                   text: '추천',
@@ -77,7 +80,6 @@ class MyApp extends StatelessWidget {
                   text: '테스트10',
                 ),
               ],
-              isScrollable: true,
             ),
           ),
           body: const BodyStructure(),
