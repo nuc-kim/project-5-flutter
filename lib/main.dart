@@ -38,13 +38,51 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: primaryWhite,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const TitleBar(),
-          elevation: 0,
+      home: DefaultTabController(
+        length: 10,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const TitleBar(),
+            elevation: 0,
+            bottom: const TabBar(
+              tabs: [
+                Tab(
+                  text: '추천',
+                ),
+                Tab(
+                  text: '랭킹',
+                ),
+                Tab(
+                  text: '커뮤니티',
+                ),
+                Tab(
+                  text: '래플',
+                ),
+                Tab(
+                  text: '이벤트',
+                ),
+                Tab(
+                  text: '테스트6',
+                ),
+                Tab(
+                  text: '테스트7',
+                ),
+                Tab(
+                  text: '테스트8',
+                ),
+                Tab(
+                  text: '테스트9',
+                ),
+                Tab(
+                  text: '테스트10',
+                ),
+              ],
+              isScrollable: true,
+            ),
+          ),
+          body: const BodyStructure(),
+          backgroundColor: Colors.white,
         ),
-        body: const BodyStructure(),
-        backgroundColor: Colors.white,
       ),
     );
   }
@@ -124,15 +162,48 @@ class BodyStructure extends StatefulWidget {
 class _BodyStructureState extends State<BodyStructure> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: const <Widget>[
-        Padding(
-          padding: EdgeInsets.zero,
-          child: SlideMenuMain(),
-        ),
-      ],
-    );
+    return const TabBarView(children: <Widget>[
+      Text(
+        '추천',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '랭킹',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '커뮤니티',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '래플',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '이벤트',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '테스트6',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '테스트7',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '테스트8',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '테스트9',
+        style: TextStyle(color: Colors.black),
+      ),
+      Text(
+        '테스트10',
+        style: TextStyle(color: Colors.black),
+      ),
+    ]);
   }
 }
 
