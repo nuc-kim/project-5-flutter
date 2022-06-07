@@ -1,48 +1,143 @@
 import 'package:flutter/material.dart';
 import 'package:project_5_flutter/sign_in.dart';
+import 'package:project_5_flutter/slide_menu_main.dart';
 
 void main() {
   //runApp(const MyApp());
-  runApp(const SignIn());
+  //runApp(const SignIn());
+  runApp(const MyApp());
 }
+
+// 20220606 HSH 테마 색상 변경 - appbar 기본 색상 변경 용
+const MaterialColor primaryWhite = MaterialColor(
+  _whitePrimaryValue,
+  <int, Color>{
+    50: Color(0xFFFFFFFF),
+    100: Color(0xFFFFFFFF),
+    200: Color(0xFFFFFFFF),
+    300: Color(0xFFFFFFFF),
+    400: Color(0xFFFFFFFF),
+    500: Color(_whitePrimaryValue),
+    600: Color(0xFFFFFFFF),
+    700: Color(0xFFFFFFFF),
+    800: Color(0xFFFFFFFF),
+    900: Color(0xFFFFFFFF),
+  },
+);
+
+const int _whitePrimaryValue = 0xFFFFFFFF;
+const titleText = '프로젝트 5';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: titleText,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: primaryWhite,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const TitleBar(),
+          elevation: 0,
+        ),
+        body: const BodyStructure(),
+        backgroundColor: Colors.white,
+      ),
+    );
+  }
+}
+
+class TitleBar extends StatefulWidget {
+  const TitleBar({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _TitleBarState();
+}
+
+class _TitleBarState extends State<TitleBar> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.centerLeft,
+      children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: IconButton(
+            onPressed: () {
+              debugPrint('알람');
+            },
+            icon: const Icon(
+              Icons.announcement_outlined,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        const Align(
+          alignment: Alignment.center,
+          child: Text(
+            titleText,
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Align(
+          alignment: const Alignment(0.65, 0.0),
+          child: IconButton(
+            onPressed: () {
+              debugPrint('검색');
+            },
+            icon: const Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            onPressed: () {
+              debugPrint('장바구니');
+            },
+            icon: const Icon(
+              Icons.shopping_bag_outlined,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class BodyStructure extends StatefulWidget {
+  const BodyStructure({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _BodyStructureState();
+}
+
+class _BodyStructureState extends State<BodyStructure> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: const <Widget>[
+        Padding(
+          padding: EdgeInsets.zero,
+          child: SlideMenuMain(),
+        ),
+      ],
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -62,6 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
   //
   @override
   Widget build(BuildContext context) {

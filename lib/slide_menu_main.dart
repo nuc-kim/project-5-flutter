@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SlideMenu extends StatefulWidget{
-  const SlideMenu({Key? key}) : super(key: key);
+class SlideMenuMain extends StatefulWidget{
+  const SlideMenuMain({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _SlideMenuState();
+  State<StatefulWidget> createState() => _SlideMenuMainState();
 }
 
-class _SlideMenuState extends State<SlideMenu>{
+class _SlideMenuMainState extends State<SlideMenuMain>{
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -18,46 +18,46 @@ class _SlideMenuState extends State<SlideMenu>{
         children: <Widget>[
           TextButton(
             onPressed: () {
-              debugPrint('테스트1');
+              debugPrint('추천');
             },
             child: const Text(
-              '테스트1',
+              '추천',
               style: TextStyle(color: Colors.black),
             ),
           ),
           TextButton(
             onPressed: () {
-              debugPrint('테스트2');
+              debugPrint('랭킹');
             },
             child: const Text(
-              '테스트2',
+              '랭킹',
               style: TextStyle(color: Colors.black),
             ),
           ),
           TextButton(
             onPressed: () {
-              debugPrint('테스트3');
+              debugPrint('커뮤니티');
             },
             child: const Text(
-              '테스트3',
+              '커뮤니티',
               style: TextStyle(color: Colors.black),
             ),
           ),
           TextButton(
             onPressed: () {
-              debugPrint('테스트4');
+              debugPrint('래플');
             },
             child: const Text(
-              '테스트4',
+              '래플',
               style: TextStyle(color: Colors.black),
             ),
           ),
           TextButton(
             onPressed: () {
-              debugPrint('테스트5');
+              debugPrint('이벤트');
             },
             child: const Text(
-              '테스트5',
+              '이벤트',
               style: TextStyle(color: Colors.black),
             ),
           ),
