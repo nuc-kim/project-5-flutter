@@ -47,11 +47,13 @@ class MyApp extends StatelessWidget {
             elevation: 0,
             bottom: const TabBar(
               isScrollable: true,
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
               unselectedLabelColor: Colors.black45,
               indicatorColor: Colors.black,
               tabs: [
                 Tab(
-                  text: '추천',
+                  text: '메인',
                 ),
                 Tab(
                   text: '랭킹',
