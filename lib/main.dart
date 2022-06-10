@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_5_flutter/sign_in.dart';
 import 'package:project_5_flutter/slide_menu_main.dart';
+import 'package:project_5_flutter/tab_main.dart';
 
 void main() {
   //runApp(const MyApp());
@@ -165,10 +166,7 @@ class _BodyStructureState extends State<BodyStructure> {
   @override
   Widget build(BuildContext context) {
     return const TabBarView(children: <Widget>[
-      Text(
-        '추천',
-        style: TextStyle(color: Colors.black),
-      ),
+      TabMain(),
       Text(
         '랭킹',
         style: TextStyle(color: Colors.black),
