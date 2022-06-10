@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_5_flutter/sign_in.dart';
-import 'package:project_5_flutter/slide_menu_main.dart';
 import 'package:project_5_flutter/tab_main.dart';
 
 void main() {
@@ -87,6 +85,35 @@ class MyApp extends StatelessWidget {
           ),
           body: const BodyStructure(),
           backgroundColor: Colors.white,
+          bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.manage_search_rounded),
+                label: '검색',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.tag_rounded),
+                label: '태그',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                label: '홈',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.thumb_up_outlined),
+                label: '좋아요',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline_rounded),
+                label: '마이',
+              ),
+            ],
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.black,
+            unselectedItemColor: Colors.white38,
+            currentIndex: 2,
+          ),
         ),
       ),
     );
