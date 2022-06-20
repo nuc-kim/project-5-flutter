@@ -155,19 +155,35 @@ class MainScreen extends StatelessWidget {
       child: SafeArea(
         child: DefaultTabController(
           length: 10,
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                pinned: false,
-                backgroundColor: Colors.white,
-                title: TitleBar(),
-              ),
-              SliverPersistentHeader(pinned: true, delegate: TabBarDelegate()),
-              SliverFillRemaining(
-                hasScrollBody: true,
-                child: BodyStructure(),
-              ),
-            ],
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  pinned: false,
+                  floating: true,
+                  forceElevated: innerBoxIsScrolled,
+                  toolbarHeight: 48,
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  title: TitleBar(),
+                ),
+                SliverOverlapAbsorber(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  sliver: SliverPersistentHeader(
+                    pinned: true,
+                    delegate: TabBarDelegate(),
+                  ),
+                ),
+              ];
+            },
+            body: Column(
+              children: [
+                Expanded(
+                  child: BodyStructure(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -384,30 +400,6 @@ class _BodyStructureState extends State<BodyStructure> {
     '협곡 순애',
   ];
 
-  final List<String> _bestPostNo = [
-    '60494',
-    '60491',
-    '60477',
-    '60486',
-    '60493',
-  ];
-
-  final List<String> _bestPostWriter = [
-    '샤이나리',
-    '이챕터스',
-    '피해제한탱커좀',
-    '크게라디오를켜고',
-    '고양이네크로맨서',
-  ];
-
-  final List<String> _bestPostHit = [
-    '10867',
-    '9113',
-    '9830',
-    '5150',
-    '6898',
-  ];
-
   final List<String> _bestPostLike = [
     '304',
     '235',
@@ -449,118 +441,126 @@ class _BodyStructureState extends State<BodyStructure> {
   Widget build(BuildContext context) {
     return TabBarView(
       children: <Widget>[
-        CustomScrollView(
-          slivers: [
-            // Carousel slider
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Stack(
-                    alignment: const Alignment(0, 0.85),
-                    children: [
-                      CarouselSlider(
-                        items: _carouselitemStrings.map(
-                          (i) {
-                            return Builder(builder: (BuildContext context) {
-                              return SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: IconButton(
-                                  onPressed: () => debugPrint(
-                                      'clicked image $_carouselIndex'),
-                                  icon: Image.asset(i),
-                                  padding: EdgeInsets.zero,
-                                ),
-                              );
-                            });
-                          },
-                        ).toList(),
-                        options: CarouselOptions(
-                          autoPlay: true,
-                          autoPlayInterval: const Duration(seconds: 3),
-                          autoPlayAnimationDuration:
-                              const Duration(milliseconds: 800),
-                          viewportFraction: 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _carouselIndex = index;
-                            });
-                          },
+        Column(
+          children: [
+            const SizedBox(
+              height: 46,
+            ),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  // Carousel slider
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        Stack(
+                          alignment: const Alignment(0, 0.85),
+                          children: [
+                            CarouselSlider(
+                              items: _carouselitemStrings.map(
+                                (i) {
+                                  return Builder(
+                                      builder: (BuildContext context) {
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: IconButton(
+                                        onPressed: () => debugPrint(
+                                            'clicked image $_carouselIndex'),
+                                        icon: Image.asset(i),
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                    );
+                                  });
+                                },
+                              ).toList(),
+                              options: CarouselOptions(
+                                autoPlay: true,
+                                autoPlayInterval: const Duration(seconds: 3),
+                                autoPlayAnimationDuration:
+                                    const Duration(milliseconds: 800),
+                                viewportFraction: 1,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _carouselIndex = index;
+                                  });
+                                },
+                              ),
+                            ),
+                            CarouselIndicator(
+                              count: _carouselitemStrings.length,
+                              index: _carouselIndex,
+                              color: Colors.black45,
+                              activeColor: Colors.white70,
+                            ),
+                          ],
                         ),
-                      ),
-                      CarouselIndicator(
-                        count: _carouselitemStrings.length,
-                        index: _carouselIndex,
-                        color: Colors.black45,
-                        activeColor: Colors.white70,
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                  // Padding
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                    ),
+                  ),
+                  // Grid Menu
+                  SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        index = index % 10;
+
+                        return Column(
+                          children: [
+                            IconButton(
+                              onPressed: () => debugPrint(
+                                  'clicked icon ${_gridItemStrings[index]}'),
+                              icon: Icon(_gridItemIcons[index]),
+                            ),
+                            Text(
+                              _gridItemStrings[index++],
+                            ),
+                          ],
+                        );
+                      },
+                      childCount: 10,
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5),
+                  ),
+                  // Padding
+                  SliverToBoxAdapter(
+                      child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  )),
+                  // Breadcrumbs
+                  const SliverPersistentHeader(
+                    pinned: true,
+                    delegate: BestPostBreadcrumbs(),
+                  ),
+                  // Best posts
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      index = index % 5;
+
+                      return ListTile(
+                        leading: Container(
+                          child: Text(_bestPostCommunityName[index]),
+                          width: 60,
+                          alignment: Alignment.center,
+                        ),
+                        title: Text(_bestPostTitleStrings[index]),
+                        subtitle: Text('[${_bestPostComment[index]}]'),
+                        trailing: Container(
+                          child: Text(_bestPostLike[index++]),
+                          width: 60,
+                          alignment: Alignment.center,
+                        ),
+                      );
+                    }, childCount: 10),
                   ),
                 ],
               ),
-            ),
-            // Padding
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-              ),
-            ),
-            // Grid Menu
-            SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  index = index % 10;
-
-                  return Column(
-                    children: [
-                      IconButton(
-                        onPressed: () => debugPrint(
-                            'clicked icon ${_gridItemStrings[index]}'),
-                        icon: Icon(_gridItemIcons[index]),
-                      ),
-                      Text(
-                        _gridItemStrings[index++],
-                      ),
-                    ],
-                  );
-                },
-                childCount: 10,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5),
-            ),
-            // Padding
-            SliverToBoxAdapter(
-                child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-            )),
-            // Breadcrumbs
-            const SliverPersistentHeader(
-              pinned: true,
-              delegate: BestPostBreadcrumbs(),
-            ),
-            // Best posts
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                index = index % 5;
-
-                return ListTile(
-                  leading: Container(
-                    child: Text(_bestPostCommunityName[index]),
-                    width: 60,
-                    alignment: Alignment.center,
-
-                  ),
-                  title: Text(_bestPostTitleStrings[index]),
-                  subtitle: Text('[${_bestPostComment[index]}]'),
-                  trailing: Container(
-                    child: Text(_bestPostLike[index++]),
-                    width: 60,
-                    alignment: Alignment.center,
-
-                  ),
-
-                );
-              }, childCount: 10),
             ),
           ],
         ),
@@ -616,21 +616,33 @@ class BestPostBreadcrumbs extends SliverPersistentHeaderDelegate {
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: TextButton(
-        onPressed: () => debugPrint('clicked best posts'),
-        child: Text(
-          '베스트5',
-          style: TextStyle(
-              fontWeight: FontWeight.w400, fontSize: 24.0, color: Colors.black),
-        ),
-      ),
+          onPressed: () => debugPrint('clicked best posts'),
+          child: Column(
+            children: [
+              Text(
+                '베스트 5',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24.0,
+                    color: Colors.black),
+              ),
+              Text(
+                '지금 핫한 5 포스트!',
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12.0,
+                    color: Colors.black45),
+              ),
+            ],
+          )),
     );
   }
 
   @override
-  double get maxExtent => 48;
+  double get maxExtent => 72;
 
   @override
-  double get minExtent => 48;
+  double get minExtent => 68;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
