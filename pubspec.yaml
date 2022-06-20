@@ -38,6 +38,8 @@ dependencies:
   carousel_slider: ^4.1.1
   carousel_indicator: ^1.0.6
 
+  sliver_tools: ^0.2.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

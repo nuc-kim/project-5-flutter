@@ -1,4 +1,7 @@
+import 'package:carousel_indicator/carousel_indicator.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:project_5_flutter/tab_main.dart';
 
 void main() {
@@ -32,6 +35,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MainScreen(),
+      ),
+      value: SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark),
+    );
+
+    /*return DefaultTabController(length: 10, child: CustomScrollView(
+      slivers:[
+        SliverAppBar(),
+        SliverPersistentHeader(delegate: ),
+        SliverFillRemaining(
+          hasScrollBody: true,
+          child: TabBarView(),
+        ),
+      ]
+    ),);*/
+
     return MaterialApp(
       title: titleText,
       theme: ThemeData(
@@ -120,6 +145,142 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      child: SafeArea(
+        child: DefaultTabController(
+          length: 10,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: false,
+                backgroundColor: Colors.white,
+                title: TitleBar(),
+              ),
+              SliverPersistentHeader(pinned: true, delegate: TabBarDelegate()),
+              SliverFillRemaining(
+                hasScrollBody: true,
+                child: BodyStructure(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TabBarDelegate extends SliverPersistentHeaderDelegate {
+  TabBarDelegate();
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: TabBar(
+        isScrollable: true,
+        tabs: [
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 1),
+              color: Colors.white,
+              child: Text('메인'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('랭킹'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('커뮤니티'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('래플'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('이벤트'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('테스트6'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('테스트7'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('테스트8'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('테스트9'),
+            ),
+          ),
+          Tab(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              color: Colors.white,
+              child: Text('테스트10'),
+            ),
+          ),
+        ],
+        indicatorWeight: 2.0,
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        labelStyle: TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+        unselectedLabelColor: Colors.grey,
+        labelColor: Colors.black,
+        indicatorColor: Colors.black,
+        indicatorSize: TabBarIndicatorSize.label,
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 48;
+
+  @override
+  double get minExtent => 48;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
+}
+
 class TitleBar extends StatefulWidget {
   const TitleBar({Key? key}) : super(key: key);
 
@@ -192,122 +353,287 @@ class BodyStructure extends StatefulWidget {
 }
 
 class _BodyStructureState extends State<BodyStructure> {
+  int _carouselIndex = 0;
+
+  final List<String> _carouselitemStrings = [
+    'resources/images/idol_full000.png',
+    'resources/images/idol_full001.png',
+    'resources/images/idol_full002.png',
+    'resources/images/idol_full022.png',
+    'resources/images/idol_full036.png',
+  ];
+
+  final List<String> _gridItemStrings = [
+    '피규어',
+    '건프라',
+    '아니메',
+    '게임',
+    '신상',
+    '아울렛',
+    '세일',
+    '이벤트',
+    '매거진',
+    '커스텀'
+  ];
+
+  final List<String> _bestPostTitleStrings = [
+    '일본에서 산 원신 웨하스 왔다',
+    '최저임금 동결하는 manhwa',
+    '조별과제 결말',
+    '지휘군단장님 인스타 글 올리셨다',
+    '협곡 순애',
+  ];
+
+  final List<String> _bestPostNo = [
+    '60494',
+    '60491',
+    '60477',
+    '60486',
+    '60493',
+  ];
+
+  final List<String> _bestPostWriter = [
+    '샤이나리',
+    '이챕터스',
+    '피해제한탱커좀',
+    '크게라디오를켜고',
+    '고양이네크로맨서',
+  ];
+
+  final List<String> _bestPostHit = [
+    '10867',
+    '9113',
+    '9830',
+    '5150',
+    '6898',
+  ];
+
+  final List<String> _bestPostLike = [
+    '304',
+    '235',
+    '338',
+    '154',
+    '240',
+  ];
+
+  final List<String> _bestPostComment = [
+    '108',
+    '68',
+    '159',
+    '54',
+    '46',
+  ];
+
+  final List<String> _bestPostCommunityName = [
+    '원신',
+    '블루아카',
+    '붕괴',
+    '로아',
+    '롤',
+  ];
+
+  final List<IconData> _gridItemIcons = [
+    Icons.emoji_people_rounded,
+    Icons.android_rounded,
+    Icons.animation_rounded,
+    Icons.gamepad_rounded,
+    Icons.new_label_rounded,
+    Icons.outlet_rounded,
+    Icons.point_of_sale_rounded,
+    Icons.event,
+    Icons.book,
+    Icons.dashboard_customize_rounded
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return const TabBarView(children: <Widget>[
-      TabMain(),
-      Text(
-        '랭킹',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '커뮤니티',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '래플',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '이벤트',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '테스트6',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '테스트7',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '테스트8',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '테스트9',
-        style: TextStyle(color: Colors.black),
-      ),
-      Text(
-        '테스트10',
-        style: TextStyle(color: Colors.black),
-      ),
-    ]);
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  //
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return TabBarView(
+      children: <Widget>[
+        CustomScrollView(
+          slivers: [
+            // Carousel slider
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Stack(
+                    alignment: const Alignment(0, 0.85),
+                    children: [
+                      CarouselSlider(
+                        items: _carouselitemStrings.map(
+                          (i) {
+                            return Builder(builder: (BuildContext context) {
+                              return SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: IconButton(
+                                  onPressed: () => debugPrint(
+                                      'clicked image $_carouselIndex'),
+                                  icon: Image.asset(i),
+                                  padding: EdgeInsets.zero,
+                                ),
+                              );
+                            });
+                          },
+                        ).toList(),
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          autoPlayInterval: const Duration(seconds: 3),
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 800),
+                          viewportFraction: 1,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _carouselIndex = index;
+                            });
+                          },
+                        ),
+                      ),
+                      CarouselIndicator(
+                        count: _carouselitemStrings.length,
+                        index: _carouselIndex,
+                        color: Colors.black45,
+                        activeColor: Colors.white70,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            // Padding
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+              ),
+            ),
+            // Grid Menu
+            SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  index = index % 10;
+
+                  return Column(
+                    children: [
+                      IconButton(
+                        onPressed: () => debugPrint(
+                            'clicked icon ${_gridItemStrings[index]}'),
+                        icon: Icon(_gridItemIcons[index]),
+                      ),
+                      Text(
+                        _gridItemStrings[index++],
+                      ),
+                    ],
+                  );
+                },
+                childCount: 10,
+              ),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5),
+            ),
+            // Padding
+            SliverToBoxAdapter(
+                child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+            )),
+            // Breadcrumbs
+            const SliverPersistentHeader(
+              pinned: true,
+              delegate: BestPostBreadcrumbs(),
+            ),
+            // Best posts
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                index = index % 5;
+
+                return ListTile(
+                  leading: Container(
+                    child: Text(_bestPostCommunityName[index]),
+                    width: 60,
+                    alignment: Alignment.center,
+
+                  ),
+                  title: Text(_bestPostTitleStrings[index]),
+                  subtitle: Text('[${_bestPostComment[index]}]'),
+                  trailing: Container(
+                    child: Text(_bestPostLike[index++]),
+                    width: 60,
+                    alignment: Alignment.center,
+
+                  ),
+
+                );
+              }, childCount: 10),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        const Text(
+          '랭킹',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '커뮤니티',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '래플',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '이벤트',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '테스트6',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '테스트7',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '테스트8',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '테스트9',
+          style: TextStyle(color: Colors.black),
+        ),
+        const Text(
+          '테스트10',
+          style: TextStyle(color: Colors.black),
+        ),
+      ],
     );
+  }
+}
+
+class BestPostBreadcrumbs extends SliverPersistentHeaderDelegate {
+  const BestPostBreadcrumbs();
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: TextButton(
+        onPressed: () => debugPrint('clicked best posts'),
+        child: Text(
+          '베스트5',
+          style: TextStyle(
+              fontWeight: FontWeight.w400, fontSize: 24.0, color: Colors.black),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 48;
+
+  @override
+  double get minExtent => 48;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }
