@@ -1,8 +1,8 @@
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:project_5_flutter/tab_main.dart';
 
 void main() {
   //runApp(const MyApp());
@@ -39,123 +39,61 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: MainScreen(),
+        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       ),
       value: SystemUiOverlayStyle(
           statusBarColor: Colors.white,
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.dark),
     );
-
-    /*return DefaultTabController(length: 10, child: CustomScrollView(
-      slivers:[
-        SliverAppBar(),
-        SliverPersistentHeader(delegate: ),
-        SliverFillRemaining(
-          hasScrollBody: true,
-          child: TabBarView(),
-        ),
-      ]
-    ),);*/
-
-    return MaterialApp(
-      title: titleText,
-      theme: ThemeData(
-        primarySwatch: primaryWhite,
-      ),
-      home: DefaultTabController(
-        length: 10,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const TitleBar(),
-            elevation: 0,
-            bottom: const TabBar(
-              isScrollable: true,
-              labelStyle: TextStyle(fontWeight: FontWeight.bold),
-              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
-              unselectedLabelColor: Colors.black45,
-              indicatorColor: Colors.black,
-              tabs: [
-                Tab(
-                  text: '메인',
-                ),
-                Tab(
-                  text: '랭킹',
-                ),
-                Tab(
-                  text: '커뮤니티',
-                ),
-                Tab(
-                  text: '래플',
-                ),
-                Tab(
-                  text: '이벤트',
-                ),
-                Tab(
-                  text: '테스트6',
-                ),
-                Tab(
-                  text: '테스트7',
-                ),
-                Tab(
-                  text: '테스트8',
-                ),
-                Tab(
-                  text: '테스트9',
-                ),
-                Tab(
-                  text: '테스트10',
-                ),
-              ],
-            ),
-          ),
-          body: const BodyStructure(),
-          backgroundColor: Colors.white,
-          bottomNavigationBar: BottomNavigationBar(
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.manage_search_rounded),
-                label: '검색',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.tag_rounded),
-                label: '태그',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: '홈',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.thumb_up_outlined),
-                label: '좋아요',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline_rounded),
-                label: '마이',
-              ),
-            ],
-            showUnselectedLabels: true,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.black,
-            unselectedItemColor: Colors.white38,
-            currentIndex: 2,
-          ),
-        ),
-      ),
-    );
   }
 }
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  bool _showBackToTopButton = false;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController()
+      ..addListener(() {
+        setState(() {
+          if(_scrollController.position.pixels >= 10){
+            _showBackToTopButton = true;
+          }else{
+            _showBackToTopButton = false;
+          }
+        });
+      });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      child: SafeArea(
+    return Scaffold(
+      body: SafeArea(
         child: DefaultTabController(
           length: 10,
           child: NestedScrollView(
+            controller: _scrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 SliverAppBar(
@@ -187,6 +125,14 @@ class MainScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: _showBackToTopButton
+          ? FloatingActionButton(
+              onPressed: () {
+                return _scrollToTop();
+              }, //_scrollToTop,
+              child: Icon(Icons.arrow_upward_rounded),
+            )
+          : null,
     );
   }
 }
@@ -530,9 +476,10 @@ class _BodyStructureState extends State<BodyStructure> {
                   ),
                   // Padding
                   SliverToBoxAdapter(
-                      child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  )),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    ),
+                  ),
                   // Breadcrumbs
                   const SliverPersistentHeader(
                     pinned: true,
@@ -564,9 +511,14 @@ class _BodyStructureState extends State<BodyStructure> {
             ),
           ],
         ),
-        const Text(
-          '랭킹',
-          style: TextStyle(color: Colors.black),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              '랭킹',
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
         ),
         const Text(
           '커뮤니티',
