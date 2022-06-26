@@ -70,6 +70,9 @@ flutter:
     - resources/images/idol_full003.png
     - resources/images/idol_full022.png
     - resources/images/idol_full036.png
+    - resources/images/goods/goods_index_001.jpg
+    - resources/images/goods/goods_index_002.jpeg
+    - resources/images/goods/goods_index_003.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

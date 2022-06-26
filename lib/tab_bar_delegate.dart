@@ -36,7 +36,7 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               color: Colors.white,
-              child: const Text('래플'),
+              child: const Text('상품'),
             ),
           ),
           Tab(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_5_flutter/tab_bar_view_goods_list.dart';
 import 'package:project_5_flutter/tab_bar_view_main.dart';
 
 class TabBarViewBaseLayout extends StatefulWidget {
@@ -29,10 +30,7 @@ class _TabBarViewBaseLayoutState extends State<TabBarViewBaseLayout> {
           '커뮤니티',
           style: TextStyle(color: Colors.black),
         ),
-        const Text(
-          '래플',
-          style: TextStyle(color: Colors.black),
-        ),
+        const TabBarViewGoodsList(),
         const Text(
           '이벤트',
           style: TextStyle(color: Colors.black),
