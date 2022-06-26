@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:project_5_flutter/custom_bottom_navigation_bar.dart';
 import 'package:project_5_flutter/tab_bar_delegate.dart';
 import 'package:project_5_flutter/tab_bar_view_base_layout.dart';
 import 'package:project_5_flutter/title_bar.dart';
@@ -35,32 +36,31 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool _showBackToTopButton = false;
-  late ScrollController _scrollController;
+  bool _showFloatingActionButton = false;
+  late ScrollController _floatingActionButtonScrollController;
 
   @override
   void initState() {
-    _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {
-          if(_scrollController.position.pixels >= 10){
-            _showBackToTopButton = true;
-          }else{
-            _showBackToTopButton = false;
-          }
-        });
+    _floatingActionButtonScrollController = ScrollController()..addListener(() {
+      setState(() {
+        if (_floatingActionButtonScrollController.position.pixels >= 10) {
+          _showFloatingActionButton = true;
+        } else {
+          _showFloatingActionButton = false;
+        }
       });
+    });
     super.initState();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _floatingActionButtonScrollController.dispose();
     super.dispose();
   }
 
   void _scrollToTop() {
-    _scrollController.animateTo(0,
+    _floatingActionButtonScrollController.animateTo(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
@@ -71,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
         child: DefaultTabController(
           length: 10,
           child: NestedScrollView(
-            controller: _scrollController,
+            controller: _floatingActionButtonScrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 // 최상단 타이틀바
@@ -106,8 +106,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
       // 플로팅 버튼 - 아래로 스크롤하면 등장하는 구조
-      floatingActionButton: _showBackToTopButton
+      floatingActionButton: _showFloatingActionButton
           ? FloatingActionButton(
               onPressed: () {
                 return _scrollToTop();

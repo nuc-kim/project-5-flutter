@@ -1,6 +1,9 @@
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:project_5_flutter/hide_navi_bar.dart';
+import 'package:project_5_flutter/main.dart';
 
 class TabBarViewMain extends StatefulWidget {
   const TabBarViewMain({Key? key}) : super(key: key);
@@ -10,6 +13,7 @@ class TabBarViewMain extends StatefulWidget {
 }
 
 class _TabBarViewMainState extends State<TabBarViewMain> {
+
   int _carouselIndex = 0;
 
   final List<String> _carouselitemStrings = [
