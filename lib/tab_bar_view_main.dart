@@ -161,7 +161,7 @@ class _TabBarViewMainState extends State<TabBarViewMain> {
                       children: [
                         IconButton(
                           onPressed: () => debugPrint(
-                              'clicked icon ${_gridItemStrings[index]}'),
+                              'clicked icon ${_gridItemStrings[--index]}'),
                           icon: Icon(_gridItemIcons[index]),
                         ),
                         Text(
