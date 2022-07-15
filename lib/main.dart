@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:project_5_flutter/custom_bottom_navigation_bar.dart';
+import 'package:project_5_flutter/mypage.dart';
 import 'package:project_5_flutter/sign_in.dart';
 import 'package:project_5_flutter/tab_bar_delegate.dart';
 import 'package:project_5_flutter/tab_bar_view_base_layout.dart';
@@ -91,7 +91,7 @@ class _MainScreenState extends State<MainScreen> {
       SignIn(),
       MainScreenBody(fabScrollController: _floatingActionButtonScrollController),
       SignIn(),
-      SignIn(),
+      MyPage(),
     ];
   }
 
