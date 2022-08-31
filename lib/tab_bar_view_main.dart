@@ -13,7 +13,6 @@ class TabBarViewMain extends StatefulWidget {
 }
 
 class _TabBarViewMainState extends State<TabBarViewMain> {
-
   int _carouselIndex = 0;
 
   final List<String> _carouselitemStrings = [
@@ -106,26 +105,27 @@ class _TabBarViewMainState extends State<TabBarViewMain> {
                       children: [
                         CarouselSlider(
                           items: _carouselitemStrings.map(
-                                (i) {
+                            (i) {
                               return Builder(
-                                  builder: (BuildContext context) {
-                                    return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: IconButton(
-                                        onPressed: () => debugPrint(
-                                            'clicked image $_carouselIndex'),
-                                        icon: Image.asset(i),
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                    );
-                                  });
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: IconButton(
+                                      onPressed: () => debugPrint(
+                                          'clicked image $_carouselIndex'),
+                                      icon: Image.asset(i),
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                  );
+                                },
+                              );
                             },
                           ).toList(),
                           options: CarouselOptions(
                             autoPlay: true,
                             autoPlayInterval: const Duration(seconds: 3),
                             autoPlayAnimationDuration:
-                            const Duration(milliseconds: 800),
+                                const Duration(milliseconds: 800),
                             viewportFraction: 1,
                             onPageChanged: (index, reason) {
                               setState(() {
@@ -154,7 +154,7 @@ class _TabBarViewMainState extends State<TabBarViewMain> {
               // Grid Menu
               SliverGrid(
                 delegate: SliverChildBuilderDelegate(
-                      (context, index) {
+                  (context, index) {
                     index = index % 10;
 
                     return Column(
@@ -172,8 +172,7 @@ class _TabBarViewMainState extends State<TabBarViewMain> {
                   },
                   childCount: 10,
                 ),
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5),
               ),
               // Padding
