@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import '../model/page_view_item.dart';
+
 @immutable
 abstract class PageViewItemState extends Equatable {}
 
@@ -26,5 +28,12 @@ class Error extends PageViewItemState {
 }
 
 class Loaded extends PageViewItemState {
-  final List<>
+  final List<PageViewItem> pageViewItems;
+
+  Loaded({
+    required this.pageViewItems,
+  });
+
+  @override
+  List<Object> get props => [this.pageViewItems];
 }
