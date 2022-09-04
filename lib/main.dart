@@ -6,8 +6,28 @@ import 'package:project_5_flutter/tab_bar_delegate.dart';
 import 'package:project_5_flutter/tab_bar_view_base_layout.dart';
 import 'package:project_5_flutter/title_bar.dart';
 
+import 'blocs/bloc_imports.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const TestApp());
+}
+
+class TestApp extends StatelessWidget {
+  const TestApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => CarouselBloc(),
+      child: Container(
+        child: BlocBuilder<CarouselBloc, CarouselState>(
+          builder: (context, state) {
+            return Text('Slide Index: ${state.carouoselValue}');
+          },
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +58,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool _showFloatingActionButton = false;
-  late ScrollController _floatingActionButtonScrollController = ScrollController();
+  late ScrollController _floatingActionButtonScrollController =
+      ScrollController();
   int _bottomNaviItemIndex = 0;
   int _screenBodyIndex = 2;
 
@@ -61,14 +82,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     _floatingActionButtonScrollController.addListener(() {
-        setState(() {
-          if (_floatingActionButtonScrollController.position.pixels >= 10) {
-            _showFloatingActionButton = true;
-          } else {
-            _showFloatingActionButton = false;
-          }
-        });
+      setState(() {
+        if (_floatingActionButtonScrollController.position.pixels >= 10) {
+          _showFloatingActionButton = true;
+        } else {
+          _showFloatingActionButton = false;
+        }
       });
+    });
     super.initState();
   }
 
@@ -82,14 +103,15 @@ class _MainScreenState extends State<MainScreen> {
     _floatingActionButtonScrollController.animateTo(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
-  
+
   List<Widget> _screenBodyList = [];
 
   _MainScreenState() {
     _screenBodyList = [
       SignIn(),
       SignIn(),
-      MainScreenBody(fabScrollController: _floatingActionButtonScrollController),
+      MainScreenBody(
+          fabScrollController: _floatingActionButtonScrollController),
       SignIn(),
       MyPage(),
     ];
