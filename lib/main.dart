@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:project_5_flutter/like/view/like_screen.dart';
 import 'package:project_5_flutter/mypage.dart';
 import 'package:project_5_flutter/sign_in.dart';
 import 'package:project_5_flutter/tab_bar_delegate.dart';
@@ -90,7 +91,7 @@ class _MainScreenState extends State<MainScreen> {
       SignIn(),
       SignIn(),
       MainScreenBody(fabScrollController: _floatingActionButtonScrollController),
-      SignIn(),
+      LikeScreen(),
       MyPage(),
     ];
   }
@@ -101,6 +102,9 @@ class _MainScreenState extends State<MainScreen> {
       body: _screenBodyList.elementAt(_screenBodyIndex),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
+          if (index == 3) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => SignIn()));
+          }
           setState(() {
             _screenBodyIndex = index;
           });

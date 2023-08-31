@@ -41,6 +41,8 @@ dependencies:
 
   sliver_tools: ^0.2.7
 
+  dio: ^5.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
