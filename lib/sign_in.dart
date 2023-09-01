@@ -88,6 +88,8 @@ class SignInForm extends StatelessWidget {
                   },
                 ),
               );
+
+              Navigator.pop(context);
             },
             child: Container(
               width: double.infinity,
