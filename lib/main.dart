@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:project_5_flutter/brand/view/brand_screen.dart';
+import 'package:project_5_flutter/common/const/data.dart';
+import 'package:project_5_flutter/common/view/splash_screen.dart';
 import 'package:project_5_flutter/like/view/like_screen.dart';
 import 'package:project_5_flutter/mypage.dart';
+import 'package:project_5_flutter/search/view/search_screen.dart';
 import 'package:project_5_flutter/sign_in.dart';
 import 'package:project_5_flutter/tab_bar_delegate.dart';
 import 'package:project_5_flutter/tab_bar_view_base_layout.dart';
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
           statusBarIconBrightness: Brightness.dark),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const MainScreen(),
+        home: SplashScreen(),
         theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       ),
     );
@@ -39,7 +43,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool _showFloatingActionButton = false;
-  late ScrollController _floatingActionButtonScrollController = ScrollController();
+  late ScrollController _floatingActionButtonScrollController =
+      ScrollController();
   int _bottomNaviItemIndex = 0;
   int _screenBodyIndex = 2;
 
@@ -62,14 +67,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     _floatingActionButtonScrollController.addListener(() {
-        setState(() {
-          if (_floatingActionButtonScrollController.position.pixels >= 10) {
-            _showFloatingActionButton = true;
-          } else {
-            _showFloatingActionButton = false;
-          }
-        });
+      setState(() {
+        if (_floatingActionButtonScrollController.position.pixels >= 10) {
+          _showFloatingActionButton = true;
+        } else {
+          _showFloatingActionButton = false;
+        }
       });
+    });
     super.initState();
   }
 
@@ -83,17 +88,31 @@ class _MainScreenState extends State<MainScreen> {
     _floatingActionButtonScrollController.animateTo(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
-  
+
   List<Widget> _screenBodyList = [];
 
   _MainScreenState() {
     _screenBodyList = [
-      SignIn(),
-      SignIn(),
-      MainScreenBody(fabScrollController: _floatingActionButtonScrollController),
+      SearchScreen(),
+      BrandScreen(),
+      MainScreenBody(
+          fabScrollController: _floatingActionButtonScrollController),
       LikeScreen(),
       MyPage(),
     ];
+  }
+
+  void _checkToken() async {
+    final refreshToken = await storage.read(key: refreshTokenKey);
+    final accessToken = await storage.read(key: accessTokenKey);
+
+    if (refreshToken == null || accessToken == null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => SignIn(),
+        ),
+      );
+    }
   }
 
   @override
@@ -102,8 +121,8 @@ class _MainScreenState extends State<MainScreen> {
       body: _screenBodyList.elementAt(_screenBodyIndex),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
-          if (index == 3) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => SignIn()));
+          if (index != 2) {
+            _checkToken();
           }
           setState(() {
             _screenBodyIndex = index;

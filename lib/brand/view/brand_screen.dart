@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:project_5_flutter/common/view/default_layout.dart';
 
-class LikeScreen extends StatelessWidget {
-  const LikeScreen({super.key});
+class BrandScreen extends StatelessWidget {
+  const BrandScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '좋아요',
+      title: '브랜드',
       body: Center(
-        child: Text('좋아요'),
+        child: Text('브랜드'),
       ),
     );
   }

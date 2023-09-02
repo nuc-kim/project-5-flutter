@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:project_5_flutter/common/const/data.dart';
 import 'package:project_5_flutter/common/const/project_five_color.dart';
 import 'package:project_5_flutter/common/view/default_layout.dart';
@@ -16,6 +15,11 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -34,7 +38,7 @@ class SignInForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final storage = FlutterSecureStorage();
+
     final dio = Dio();
 
     const emulatorIp = '10.0.2.2:3000';

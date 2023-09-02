@@ -4,13 +4,15 @@ import 'package:project_5_flutter/common/const/project_five_color.dart';
 class DefaultLayout extends StatelessWidget {
   const DefaultLayout({
     super.key,
-    required this.title,
-    required this.isPopUp,
+    this.title,
+    this.isPopUp = false,
+    this.backgroundColor,
     required this.body,
   });
 
-  final String title;
+  final String? title;
   final bool isPopUp;
+  final Color? backgroundColor;
   final Widget body;
 
   @override
@@ -31,15 +33,17 @@ class DefaultLayout extends StatelessWidget {
                 ),
               )
             : null,
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
+        title: title != null
+            ? Text(
+                title!,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+              )
+            : null,
         centerTitle: true,
         elevation: 0,
-        backgroundColor: ProjectFiveColor.background,
+        backgroundColor: backgroundColor ?? ProjectFiveColor.background,
       ),
       body: body,
     );
