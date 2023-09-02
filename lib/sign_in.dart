@@ -1,49 +1,36 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
 
-class SignIn extends StatelessWidget {
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:project_5_flutter/common/const/data.dart';
+import 'package:project_5_flutter/common/const/project_five_color.dart';
+import 'package:project_5_flutter/common/view/default_layout.dart';
+
+class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    const appTitle = '로그인';
+  State<SignIn> createState() => _SignInState();
+}
 
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () {
-                    debugPrint('뒤로가기');
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const Align(
-                alignment: Alignment.center,
-                child: Text(
-                  appTitle,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              )
-            ],
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: const Color(0xFFFFFFFF),
-        ),
-        body: const SignInForm(),
-        backgroundColor: const Color(0xFFFFFFFF),
+class _SignInState extends State<SignIn> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultLayout(
+      title: '로그인',
+      isPopUp: true,
+      onBackPressed: () {
+        Navigator.pop(context, true);
+      },
+      body: const SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: SignInForm(),
       ),
     );
   }
@@ -54,51 +41,86 @@ class SignInForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-          child: TextField(
-            decoration: InputDecoration(
+
+    final dio = Dio();
+
+    const emulatorIp = '10.0.2.2:3000';
+    const simulatorIp = '127.0.0.1:3000';
+
+    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+
+    String username = '';
+    String password = '';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          TextFormField(
+            onChanged: (value) {
+              username = value;
+            },
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: '아이디',
             ),
           ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-          child: TextField(
+          const SizedBox(height: 16),
+          TextFormField(
+            onChanged: (value) {
+              password = value;
+            },
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: '비밀번호',
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 20, 8, 2),
-          child: ElevatedButton(
+          const SizedBox(height: 16),
+          ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: const Color(0xFF000000),
-              fixedSize: const Size(double.maxFinite, 60),
+              backgroundColor: ProjectFiveColor.buttonBackground,
               elevation: 0,
             ),
-            onPressed: () {
-              debugPrint('로그인');
+            onPressed: () async {
+              final rawString = '$username:$password';
+
+              Codec<String, String> stringToBase64 = utf8.fuse(base64);
+
+              String token = stringToBase64.encode(rawString);
+
+              final response = await dio.post(
+                'http://$ip/auth/login',
+                options: Options(
+                  headers: {
+                    'authorization': 'Basic $token',
+                  },
+                ),
+              );
+
+              final refreshToken = response.data['refreshToken'];
+              final accessToken = response.data['accessToken'];
+
+              await storage.write(key: refreshTokenKey, value: refreshToken);
+              await storage.write(key: accessTokenKey, value: accessToken);
+
+              Navigator.pop(context);
             },
-            child: const Text(
-              '로그인',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
+            child: Container(
+              width: double.infinity,
+              height: 60,
+              alignment: Alignment.center,
+              child: const Text(
+                '로그인',
+                style: TextStyle(
+                  color: ProjectFiveColor.buttonText,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 2, 8, 10),
-          child: Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               TextButton(
@@ -110,7 +132,7 @@ class SignInForm extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.grey,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -118,7 +140,7 @@ class SignInForm extends StatelessWidget {
                 '|',
                 style: TextStyle(
                   color: Colors.grey,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               TextButton(
@@ -130,109 +152,89 @@ class SignInForm extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.grey,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-          child: ElevatedButton(
+          ElevatedButton(
             style: ElevatedButton.styleFrom(
-              onPrimary: const Color.fromRGBO(0x00, 0x00, 0x00, 1),
-              primary: const Color.fromRGBO(0xfa, 0xe1, 0x00, 1),
+              backgroundColor: Colors.yellow,
               fixedSize: const Size(double.maxFinite, 60),
               elevation: 0,
             ),
             onPressed: () {
               debugPrint('카카오 로그인');
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text(''),
-                Text(
-                  '카카오 로그인',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF000000),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            child: const Text(
+              '카카오 로그인',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFF000000),
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-          child: ElevatedButton(
+          const SizedBox(height: 16),
+          ElevatedButton(
             style: ElevatedButton.styleFrom(
-              onPrimary: const Color(0xFF000000),
-              primary: const Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFFFFFFF),
               fixedSize: const Size(double.maxFinite, 60),
-              side: const BorderSide(color: Color(0xFFAAAAAA), width: 1),
+              side: const BorderSide(
+                color: Color(0xFFAAAAAA),
+                width: 1,
+              ),
               elevation: 0,
             ),
             onPressed: () {
               debugPrint('Google 로그인');
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Icon(
-                  Icons.g_mobiledata_rounded,
-                ),
-                Text(''),
-                Text(
-                  'Google 로그인',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-              child: Text(
-                '가입하고 프로젝트 5를 경험하세요!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.blue,
-                ),
+            child: const Text(
+              'Google 로그인',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-              child: OutlinedButton(
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+                child: Text(
+                  '가입하고 프로젝트5를 경험하세요!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: ProjectFiveColor.buttonBackground,
+                  ),
+                ),
+              ),
+              OutlinedButton(
                 onPressed: () {
                   debugPrint('회원가입');
                 },
                 style: OutlinedButton.styleFrom(
-                  primary: Theme.of(context).colorScheme.primary,
-                  side:
-                      BorderSide(color: Theme.of(context).colorScheme.primary),
+                  side: const BorderSide(
+                    color: ProjectFiveColor.buttonBackground,
+                  ),
                   fixedSize: const Size(100, 30),
                   elevation: 0,
                 ),
                 child: const Text(
                   '회원가입',
-                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: ProjectFiveColor.buttonBackground,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
-
