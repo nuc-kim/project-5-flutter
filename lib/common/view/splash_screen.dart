@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_5_flutter/common/const/data.dart';
 import 'package:project_5_flutter/common/view/default_layout.dart';
 import 'package:project_5_flutter/main.dart';
 
@@ -13,6 +14,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    deleteToken();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Future.delayed(
         Duration(seconds: 2),
@@ -21,6 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     });
+  }
+
+  void deleteToken() async {
+    await storage.deleteAll();
   }
 
   @override

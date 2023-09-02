@@ -107,11 +107,16 @@ class _MainScreenState extends State<MainScreen> {
     final accessToken = await storage.read(key: accessTokenKey);
 
     if (refreshToken == null || accessToken == null) {
-      Navigator.of(context).push(
+      final isBackPressed = await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => SignIn(),
         ),
       );
+      if (isBackPressed) {
+        setState(() {
+          _screenBodyIndex = 2;
+        });
+      }
     }
   }
 

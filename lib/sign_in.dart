@@ -25,6 +25,9 @@ class _SignInState extends State<SignIn> {
     return DefaultLayout(
       title: '로그인',
       isPopUp: true,
+      onBackPressed: () {
+        Navigator.pop(context, true);
+      },
       body: const SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: SignInForm(),

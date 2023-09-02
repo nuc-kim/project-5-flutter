@@ -6,12 +6,14 @@ class DefaultLayout extends StatelessWidget {
     super.key,
     this.title,
     this.isPopUp = false,
+    this.onBackPressed,
     this.backgroundColor,
     required this.body,
   });
 
   final String? title;
   final bool isPopUp;
+  final VoidCallback? onBackPressed;
   final Color? backgroundColor;
   final Widget body;
 
@@ -22,7 +24,7 @@ class DefaultLayout extends StatelessWidget {
         automaticallyImplyLeading: false,
         leading: isPopUp
             ? IconButton(
-                onPressed: () {
+                onPressed: onBackPressed ?? () {
                   Navigator.of(context).pop();
                 },
                 padding: const EdgeInsets.only(left: 5),
