@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_5_flutter/common/router/go_router.dart';
 import 'package:project_5_flutter/common/theme/project_five_theme.dart';
-import 'package:project_5_flutter/common/view/splash_screen.dart';
 
 void main() {
   runApp(
@@ -18,7 +17,7 @@ class ProjectFiveApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(goRouterProvider)
+    final router = ref.watch(goRouterProvider);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
