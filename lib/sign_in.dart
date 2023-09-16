@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:project_5_flutter/common/const/data.dart';
-import 'package:project_5_flutter/common/const/project_five_color.dart';
+import 'package:project_5_flutter/common/util/build_context_extensions.dart';
 import 'package:project_5_flutter/common/view/default_layout.dart';
 
 class SignIn extends StatefulWidget {
@@ -80,7 +80,7 @@ class SignInForm extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: ProjectFiveColor.buttonBackground,
+              backgroundColor: context.colorScheme.primary,
               elevation: 0,
             ),
             onPressed: () async {
@@ -111,10 +111,10 @@ class SignInForm extends StatelessWidget {
               width: double.infinity,
               height: 60,
               alignment: Alignment.center,
-              child: const Text(
+              child: Text(
                 '로그인',
                 style: TextStyle(
-                  color: ProjectFiveColor.buttonText,
+                  color: context.colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -203,13 +203,13 @@ class SignInForm extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
                 child: Text(
                   '가입하고 프로젝트5를 경험하세요!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: ProjectFiveColor.buttonBackground,
+                    color: context.colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -218,16 +218,16 @@ class SignInForm extends StatelessWidget {
                   debugPrint('회원가입');
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(
-                    color: ProjectFiveColor.buttonBackground,
+                  side: BorderSide(
+                    color: context.colorScheme.onSurfaceVariant,
                   ),
                   fixedSize: const Size(100, 30),
                   elevation: 0,
                 ),
-                child: const Text(
+                child: Text(
                   '회원가입',
                   style: TextStyle(
-                    color: ProjectFiveColor.buttonBackground,
+                    color: context.colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
