@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_5_flutter/common/const/project_five_color.dart';
+import 'package:project_5_flutter/common/util/build_context_extensions.dart';
 
 class DefaultLayout extends StatelessWidget {
   const DefaultLayout({
@@ -24,12 +24,13 @@ class DefaultLayout extends StatelessWidget {
         automaticallyImplyLeading: false,
         leading: isPopUp
             ? IconButton(
-                onPressed: onBackPressed ?? () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: onBackPressed ??
+                    () {
+                      Navigator.of(context).pop();
+                    },
                 padding: const EdgeInsets.only(left: 5),
                 splashRadius: 20,
-                color: Colors.black,
+                color: context.colorScheme.onSurface,
                 icon: const Icon(
                   Icons.arrow_back_ios,
                 ),
@@ -45,9 +46,11 @@ class DefaultLayout extends StatelessWidget {
             : null,
         centerTitle: true,
         elevation: 0,
-        backgroundColor: backgroundColor ?? ProjectFiveColor.background,
+        backgroundColor: backgroundColor,
       ),
-      body: body,
+      body: SafeArea(
+        child: body,
+      ),
     );
   }
 }

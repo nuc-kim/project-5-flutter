@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:project_5_flutter/common/const/data.dart';
 import 'package:project_5_flutter/common/view/default_layout.dart';
+import 'package:project_5_flutter/common/view/root_screen.dart';
 import 'package:project_5_flutter/main.dart';
+
+import '../../home/view/home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  static const String path = '/';
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -18,10 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Future.delayed(
-        Duration(seconds: 2),
-        () => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainScreen()),
-        ),
+        const Duration(seconds: 2),
+        () => context.goNamed(RootScreen.path),
       );
     });
   }
